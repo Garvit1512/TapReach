@@ -18,7 +18,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -31,48 +31,51 @@ const Navbar = () => {
 
   return (
     <motion.header
-      initial={{ y: -80, opacity: 0 }}
+      initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, ease: EASE, delay: 0.2 }}
-      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-500 ${
-        scrolled ? "border-b border-white/10 bg-black/70 backdrop-blur-2xl" : "border-b border-transparent bg-transparent"
-      }`}
+      transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
+      className="fixed inset-x-0 top-0 z-50 px-4 pt-4 md:px-6"
       data-testid="navbar"
     >
-      <nav className="mx-auto flex h-[76px] max-w-7xl items-center justify-between px-6 md:px-12">
+      <nav
+        className={`mx-auto flex h-14 max-w-5xl items-center justify-between rounded-xl px-4 transition-all duration-300 md:px-5 ${
+          scrolled
+            ? "border border-white/[0.08] bg-[#111111]/80 shadow-[0_8px_32px_rgba(0,0,0,0.4)] backdrop-blur-xl"
+            : "border border-transparent bg-transparent"
+        }`}
+      >
         <button onClick={() => go("#home")} aria-label="TapReach home" data-testid="nav-logo-btn">
           <Logo compact />
         </button>
 
-        <div className="hidden items-center gap-8 lg:flex">
+        <div className="hidden items-center gap-1 lg:flex">
           {LINKS.map((l) => (
             <button
               key={l.href}
               onClick={() => go(l.href)}
-              className="font-body group relative text-sm font-medium text-[#B8B8B8] transition-colors duration-300 hover:text-white"
+              className="font-body rounded-md px-3 py-1.5 text-[13px] font-medium text-[#a1a1aa] transition-colors duration-200 hover:text-[#fafafa]"
               data-testid={`nav-link-${l.label.toLowerCase().replace(/\s/g, "-")}`}
             >
               {l.label}
-              <span className="absolute -bottom-1.5 left-0 h-px w-0 bg-[#8BFF00] transition-[width] duration-300 group-hover:w-full" />
             </button>
           ))}
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <button
             onClick={() => go("#contact")}
-            className="hidden items-center gap-2 rounded-full bg-gradient-to-r from-[#8BFF00] to-[#65E600] px-6 py-2.5 text-sm font-bold text-black shadow-[0_0_18px_rgba(139,255,0,0.3)] transition-[box-shadow,transform] duration-300 hover:scale-105 hover:shadow-[0_0_36px_rgba(139,255,0,0.55)] active:scale-95 sm:inline-flex"
+            className="hidden items-center gap-1.5 rounded-lg bg-[#7ae02e] px-4 py-2 text-[13px] font-semibold text-[#090909] transition-colors duration-200 hover:bg-[#8bff00] sm:inline-flex"
             data-testid="nav-book-demo-btn"
           >
-            Book Demo <ArrowRight size={15} strokeWidth={2.5} />
+            Get Mockup <ArrowRight size={14} strokeWidth={2.5} />
           </button>
           <button
             onClick={() => setOpen(!open)}
-            className="glass inline-flex h-10 w-10 items-center justify-center rounded-full text-white lg:hidden"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-white/[0.08] bg-white/[0.03] text-[#fafafa] lg:hidden"
             aria-label="Toggle menu"
             data-testid="nav-mobile-menu-btn"
           >
-            {open ? <X size={18} /> : <Menu size={18} />}
+            {open ? <X size={16} /> : <Menu size={16} />}
           </button>
         </div>
       </nav>
@@ -80,22 +83,22 @@ const Navbar = () => {
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.4, ease: EASE }}
-            className="overflow-hidden border-b border-white/10 bg-black/90 backdrop-blur-2xl lg:hidden"
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.25, ease: EASE }}
+            className="mx-auto mt-2 max-w-5xl overflow-hidden rounded-xl border border-white/[0.08] bg-[#111111]/95 backdrop-blur-xl lg:hidden"
             data-testid="nav-mobile-menu"
           >
-            <div className="flex flex-col gap-1 px-6 py-6">
+            <div className="flex flex-col p-2">
               {LINKS.map((l, i) => (
                 <motion.button
                   key={l.href}
-                  initial={{ opacity: 0, x: -16 }}
+                  initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.05 * i, duration: 0.4, ease: EASE }}
+                  transition={{ delay: 0.03 * i, duration: 0.3, ease: EASE }}
                   onClick={() => go(l.href)}
-                  className="rounded-xl px-4 py-3 text-left text-lg font-medium text-[#B8B8B8] transition-colors duration-200 hover:bg-white/5 hover:text-white"
+                  className="rounded-lg px-3 py-2.5 text-left text-[15px] font-medium text-[#a1a1aa] transition-colors duration-200 hover:bg-white/[0.04] hover:text-[#fafafa]"
                   data-testid={`nav-mobile-link-${l.label.toLowerCase().replace(/\s/g, "-")}`}
                 >
                   {l.label}
@@ -103,10 +106,10 @@ const Navbar = () => {
               ))}
               <button
                 onClick={() => go("#contact")}
-                className="mt-4 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#8BFF00] to-[#65E600] px-6 py-3.5 font-bold text-black"
+                className="mt-2 inline-flex items-center justify-center gap-2 rounded-lg bg-[#7ae02e] px-4 py-3 text-sm font-semibold text-[#090909]"
                 data-testid="nav-mobile-book-demo-btn"
               >
-                Book Free Demo <ArrowRight size={16} />
+                Get Free Mockup <ArrowRight size={15} />
               </button>
             </div>
           </motion.div>

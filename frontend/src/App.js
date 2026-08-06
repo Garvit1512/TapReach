@@ -23,7 +23,7 @@ const ScrollProgress = () => {
   const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 26 });
   return (
     <motion.div
-      className="fixed inset-x-0 top-0 z-[60] h-[2px] origin-left bg-gradient-to-r from-[#8BFF00] to-[#65E600] shadow-[0_0_10px_rgba(139,255,0,0.7)]"
+      className="fixed inset-x-0 top-0 z-[60] h-px origin-left bg-[#7ae02e]/60"
       style={{ scaleX }}
     />
   );
@@ -33,7 +33,7 @@ function App() {
   useLenis();
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen overflow-x-clip bg-[#090909] text-[#fafafa]">
       <div className="noise-overlay" />
       <ScrollProgress />
       <Navbar />
@@ -53,7 +53,18 @@ function App() {
         <Contact />
       </main>
       <Footer />
-      <Toaster theme="dark" position="bottom-center" toastOptions={{ style: { background: "#111", border: "1px solid rgba(139,255,0,0.3)", color: "#fff" } }} />
+      <Toaster
+        theme="dark"
+        position="bottom-center"
+        toastOptions={{
+          style: {
+            background: "#141414",
+            border: "1px solid rgba(255,255,255,0.08)",
+            color: "#fafafa",
+            borderRadius: "12px",
+          },
+        }}
+      />
     </div>
   );
 }

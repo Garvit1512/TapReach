@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useScroll } from "framer-motion";
 import { Star, ArrowRight, Check, Nfc, MousePointerClick } from "lucide-react";
 import { GlowButton, GhostButton, SectionTag, scrollTo, EASE } from "./shared";
 import { LogoMark } from "./Logo";
 
 const LINES = [
-  { text: "Get More", cls: "text-white" },
-  { text: "Google Reviews.", cls: "text-white" },
+  { text: "Get More", cls: "text-[#fafafa]" },
+  { text: "Google Reviews.", cls: "text-[#fafafa]" },
   { text: "One Tap Away.", cls: "text-gradient-green" },
 ];
 
@@ -16,20 +16,19 @@ const NfcWaves = ({ active }) => (
       <motion.path
         key={i}
         d={`M${14 + i * 4} ${40 - i * 2} A ${16 + i * 9} ${16 + i * 9} 0 0 1 ${58 - i * 2} ${14 + i * 4}`}
-        stroke="#8BFF00"
-        strokeWidth="3.5"
+        stroke="#7AE02E"
+        strokeWidth="2.5"
         strokeLinecap="round"
-        initial={{ opacity: 0.15 }}
-        animate={active ? { opacity: [0.15, 1, 0.15] } : { opacity: [0.1, 0.45, 0.1] }}
+        initial={{ opacity: 0.2 }}
+        animate={active ? { opacity: [0.2, 0.8, 0.2] } : { opacity: [0.15, 0.4, 0.15] }}
         transition={{ duration: active ? 1 : 2.6, repeat: Infinity, delay: i * 0.22, ease: "easeInOut" }}
-        style={{ filter: "drop-shadow(0 0 6px rgba(139,255,0,0.7))" }}
       />
     ))}
   </svg>
 );
 
 const Stars = ({ size = 16, animateIn = false, gap = 0.12 }) => (
-  <div className="flex gap-1">
+  <div className="flex gap-0.5">
     {[0, 1, 2, 3, 4].map((i) => (
       <motion.span
         key={i}
@@ -37,7 +36,7 @@ const Stars = ({ size = 16, animateIn = false, gap = 0.12 }) => (
         animate={animateIn ? { scale: 1, rotate: 0 } : {}}
         transition={{ delay: 0.5 + i * gap, type: "spring", stiffness: 260, damping: 14 }}
       >
-        <Star size={size} fill="#8BFF00" stroke="#8BFF00" strokeWidth={1} />
+        <Star size={size} fill="#7AE02E" stroke="#7AE02E" strokeWidth={1} />
       </motion.span>
     ))}
   </div>
@@ -46,44 +45,44 @@ const Stars = ({ size = 16, animateIn = false, gap = 0.12 }) => (
 const ReviewPhone = ({ posted }) => (
   <motion.div
     key="phone"
-    initial={{ x: 150, y: 60, opacity: 0, rotate: 10 }}
-    animate={{ x: 0, y: 0, opacity: 1, rotate: 4 }}
-    exit={{ x: 150, y: 60, opacity: 0, rotate: 10 }}
+    initial={{ x: 120, y: 40, opacity: 0, rotate: 8 }}
+    animate={{ x: 0, y: 0, opacity: 1, rotate: 3 }}
+    exit={{ x: 120, y: 40, opacity: 0, rotate: 8 }}
     transition={{ type: "spring", stiffness: 110, damping: 17 }}
-    className="absolute -bottom-4 -right-10 z-20 w-[215px] md:-right-16 md:w-[235px]"
+    className="absolute -bottom-4 -right-10 z-20 w-[210px] md:-right-14 md:w-[225px]"
     data-testid="hero-review-phone"
   >
-    <div className="rounded-[2.2rem] border border-white/15 bg-[#050505] p-2.5 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.9)]">
-      <div className="rounded-[1.8rem] border border-white/5 bg-[#101010] p-4">
+    <div className="rounded-[1.75rem] border border-white/[0.1] bg-[#111111] p-2 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.8)]">
+      <div className="rounded-[1.4rem] border border-white/[0.06] bg-[#161616] p-4">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-sm font-black text-black">G</div>
+          <div className="flex h-7 w-7 items-center justify-center rounded-full bg-white text-xs font-bold text-black">G</div>
           <div>
-            <p className="text-[11px] font-bold text-white">Google Reviews</p>
-            <p className="font-body text-[9px] text-[#B8B8B8]">Luxe Salon &amp; Spa</p>
+            <p className="text-[11px] font-semibold text-white">Google Reviews</p>
+            <p className="font-body text-[9px] text-[#71717a]">Luxe Salon &amp; Spa</p>
           </div>
         </div>
-        <p className="font-body mt-4 text-[10px] text-[#B8B8B8]">Rate your experience</p>
+        <p className="font-body mt-4 text-[10px] text-[#71717a]">Rate your experience</p>
         <div className="mt-1.5">
-          <Stars size={18} animateIn />
+          <Stars size={16} animateIn />
         </div>
         <div className="mt-4 space-y-1.5">
-          <div className="h-2 w-full rounded-full bg-white/10" />
-          <div className="h-2 w-4/5 rounded-full bg-white/10" />
-          <div className="h-2 w-3/5 rounded-full bg-white/10" />
+          <div className="h-1.5 w-full rounded bg-white/[0.08]" />
+          <div className="h-1.5 w-4/5 rounded bg-white/[0.08]" />
+          <div className="h-1.5 w-3/5 rounded bg-white/[0.08]" />
         </div>
         <AnimatePresence mode="wait">
           {posted ? (
             <motion.div
               key="done"
-              initial={{ opacity: 0, scale: 0.8 }}
+              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ type: "spring", stiffness: 300, damping: 18 }}
-              className="mt-4 flex items-center justify-center gap-1.5 rounded-full bg-[#8BFF00]/15 py-2 text-[11px] font-bold text-[#8BFF00]"
+              className="mt-4 flex items-center justify-center gap-1.5 rounded-lg bg-[#7ae02e]/10 py-2 text-[11px] font-semibold text-[#7ae02e]"
             >
-              <Check size={13} strokeWidth={3} /> Review posted
+              <Check size={12} strokeWidth={2.5} /> Review posted
             </motion.div>
           ) : (
-            <motion.div key="post" exit={{ opacity: 0 }} className="mt-4 rounded-full bg-gradient-to-r from-[#8BFF00] to-[#65E600] py-2 text-center text-[11px] font-bold text-black">
+            <motion.div key="post" exit={{ opacity: 0 }} className="mt-4 rounded-lg bg-[#7ae02e] py-2 text-center text-[11px] font-semibold text-[#090909]">
               Post review
             </motion.div>
           )}
@@ -95,44 +94,44 @@ const ReviewPhone = ({ posted }) => (
 
 const NfcStand = ({ tapped, onTap }) => (
   <motion.div
-    animate={{ y: [0, -16, 0] }}
-    transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
+    animate={{ y: [0, -10, 0] }}
+    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
     className="preserve-3d relative"
   >
     <motion.button
       onClick={onTap}
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.96 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
       className="preserve-3d relative block cursor-pointer outline-none"
-      style={{ transform: "rotateY(-14deg) rotateX(7deg)" }}
-      aria-label="Tap the NFC stand"
+      style={{ transform: "rotateY(-12deg) rotateX(6deg)" }}
+      aria-label="Tap the NFC card"
       data-testid="hero-nfc-stand"
     >
-      <div className="relative w-[270px] rounded-[2rem] border border-white/12 bg-gradient-to-b from-[#1a1a1a] via-[#101010] to-[#080808] p-7 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.08)] md:w-[300px]">
-        <div className="pointer-events-none absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_30%_0%,rgba(139,255,0,0.12),transparent_55%)]" />
+      <div className="relative w-[260px] rounded-2xl border border-white/[0.1] bg-gradient-to-b from-[#1a1a1a] to-[#111111] p-6 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.7)] md:w-[290px]">
+        <div className="pointer-events-none absolute inset-0 rounded-2xl bg-[radial-gradient(circle_at_30%_0%,rgba(122,224,46,0.08),transparent_55%)]" />
         <div className="flex items-start justify-between">
-          <LogoMark size={44} id="stand" />
+          <LogoMark size={40} id="stand" />
           <NfcWaves active={tapped} />
         </div>
-        <div className="mt-8 text-left">
-          <p className="text-2xl font-black tracking-tight text-white">
+        <div className="mt-7 text-left">
+          <p className="text-xl font-semibold tracking-[-0.02em] text-white">
             Tap to <span className="text-gradient-green">Review</span>
           </p>
-          <p className="font-body mt-2 text-sm leading-relaxed text-[#B8B8B8]">
-            Hold your phone near this stand to rate us on Google.
+          <p className="font-body mt-2 text-sm leading-relaxed text-[#71717a]">
+            Hold your phone near this card to rate us on Google.
           </p>
         </div>
-        <div className="mt-6">
-          <Stars size={15} />
+        <div className="mt-5">
+          <Stars size={14} />
         </div>
-        <div className="mt-7 flex items-center gap-2 rounded-full border border-[#8BFF00]/25 bg-[#8BFF00]/10 px-4 py-2">
-          <Nfc size={14} className="text-[#8BFF00]" />
-          <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#8BFF00]">NFC + QR Enabled</span>
+        <div className="mt-6 flex items-center gap-2 rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2">
+          <Nfc size={13} className="text-[#7ae02e]" />
+          <span className="text-[10px] font-medium uppercase tracking-wider text-[#a1a1aa]">NFC + QR Enabled</span>
         </div>
       </div>
-      <div className="mx-auto mt-[-4px] h-[14px] w-[180px] rounded-b-[1.4rem] border-x border-b border-white/10 bg-gradient-to-b from-[#141414] to-[#050505]" />
-      <div className="mx-auto h-[7px] w-[220px] rounded-full bg-black shadow-[0_18px_40px_rgba(139,255,0,0.22)]" />
-      <span className="ping-ring pointer-events-none absolute left-1/2 top-1/2 -z-10 h-40 w-40 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#8BFF00]/40" />
+      <div className="mx-auto mt-[-3px] h-3 w-[160px] rounded-b-xl border-x border-b border-white/[0.08] bg-[#141414]" />
+      <div className="mx-auto h-1.5 w-[200px] rounded-full bg-[#090909] shadow-[0_12px_32px_rgba(0,0,0,0.5)]" />
+      <span className="ping-ring pointer-events-none absolute left-1/2 top-1/2 -z-10 h-36 w-36 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#7ae02e]/20" />
     </motion.button>
 
     <AnimatePresence>{tapped && <ReviewPhone posted={tapped > 1} />}</AnimatePresence>
@@ -144,10 +143,10 @@ const Hero = () => {
   const [tapped, setTapped] = useState(0);
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [9, -9]), { stiffness: 60, damping: 16 });
-  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-11, 11]), { stiffness: 60, damping: 16 });
+  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [6, -6]), { stiffness: 60, damping: 16 });
+  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-8, 8]), { stiffness: 60, damping: 16 });
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-  const parallaxY = useTransform(scrollYProgress, [0, 1], [0, 130]);
+  const parallaxY = useTransform(scrollYProgress, [0, 1], [0, 80]);
   const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
 
   useEffect(() => {
@@ -155,18 +154,6 @@ const Hero = () => {
     const t = setTimeout(() => setTapped(2), 2100);
     return () => clearTimeout(t);
   }, [tapped]);
-
-  const particles = useMemo(
-    () =>
-      Array.from({ length: 26 }, (_, i) => ({
-        left: `${(i * 37 + 13) % 100}%`,
-        top: `${(i * 53 + 7) % 100}%`,
-        size: 2 + ((i * 7) % 3),
-        dur: 5 + ((i * 13) % 6),
-        delay: (i * 0.7) % 4,
-      })),
-    []
-  );
 
   const onMove = (e) => {
     const r = e.currentTarget.getBoundingClientRect();
@@ -179,35 +166,26 @@ const Hero = () => {
       id="home"
       ref={ref}
       onMouseMove={onMove}
-      className="relative flex min-h-screen items-center overflow-hidden pb-24 pt-36 md:pt-40"
+      className="relative flex min-h-screen items-center overflow-hidden pb-20 pt-32 md:pt-36"
       data-testid="hero-section"
     >
-      <div className="pointer-events-none absolute -left-40 top-[-10%] h-[560px] w-[560px] rounded-full bg-[#8BFF00]/[0.07] blur-[130px]" />
-      <div className="pointer-events-none absolute -right-40 bottom-[-20%] h-[620px] w-[620px] rounded-full bg-[#65E600]/[0.06] blur-[150px]" />
-      {particles.map((p, i) => (
-        <motion.span
-          key={i}
-          className="pointer-events-none absolute rounded-full bg-[#8BFF00]"
-          style={{ left: p.left, top: p.top, width: p.size, height: p.size }}
-          animate={{ y: [0, -34, 0], opacity: [0.08, 0.55, 0.08] }}
-          transition={{ duration: p.dur, repeat: Infinity, delay: p.delay, ease: "easeInOut" }}
-        />
-      ))}
+      <div className="grid-bg pointer-events-none absolute inset-0" />
+      <div className="pointer-events-none absolute left-1/2 top-0 h-[480px] w-[720px] -translate-x-1/2 rounded-full bg-[#7ae02e]/[0.04] blur-[120px]" />
 
-      <div className="relative z-10 mx-auto grid w-full max-w-7xl grid-cols-1 items-center gap-20 px-6 md:px-12 lg:grid-cols-2 lg:gap-8">
+      <div className="relative z-10 mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-16 px-6 md:px-8 lg:grid-cols-2 lg:gap-12">
         <div>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, duration: 0.7, ease: EASE }}>
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.6, ease: EASE }}>
             <SectionTag>One Tap. Endless Reach.</SectionTag>
           </motion.div>
 
-          <h1 className="mt-8 text-5xl font-black leading-[1.02] tracking-tighter md:text-6xl lg:text-7xl" data-testid="hero-heading">
+          <h1 className="mt-6 text-[2.75rem] font-semibold leading-[1.08] tracking-[-0.04em] md:text-6xl lg:text-[4rem]" data-testid="hero-heading">
             {LINES.map((l, i) => (
-              <span key={i} className="block overflow-hidden pb-1">
+              <span key={i} className="block overflow-hidden">
                 <motion.span
                   className={`block ${l.cls}`}
-                  initial={{ y: "112%" }}
+                  initial={{ y: "100%" }}
                   animate={{ y: 0 }}
-                  transition={{ delay: 0.35 + i * 0.14, duration: 0.95, ease: EASE }}
+                  transition={{ delay: 0.3 + i * 0.1, duration: 0.8, ease: EASE }}
                 >
                   {l.text}
                 </motion.span>
@@ -216,23 +194,23 @@ const Hero = () => {
           </h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.9, duration: 0.8, ease: EASE }}
-            className="font-body mt-7 max-w-xl text-lg leading-relaxed text-[#B8B8B8] md:text-xl"
+            transition={{ delay: 0.7, duration: 0.6, ease: EASE }}
+            className="font-body mt-6 max-w-lg text-[17px] leading-relaxed text-[#71717a]"
             data-testid="hero-subheading"
           >
-            Beautiful NFC Review Displays designed to help local businesses collect more Google reviews — effortlessly.
+            Custom NFC review displays for salons, gyms, cafes and clinics - designed, programmed and delivered ready to use.
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.05, duration: 0.8, ease: EASE }}
-            className="mt-10 flex flex-wrap items-center gap-4"
+            transition={{ delay: 0.85, duration: 0.6, ease: EASE }}
+            className="mt-8 flex flex-wrap items-center gap-3"
           >
             <GlowButton onClick={() => scrollTo("#contact")} data-testid="hero-book-demo-btn">
-              Book Free Demo <ArrowRight size={18} strokeWidth={2.5} />
+              Get Free Mockup <ArrowRight size={16} strokeWidth={2.5} />
             </GlowButton>
             <GhostButton onClick={() => scrollTo("#products")} data-testid="hero-view-products-btn">
               View Products
@@ -242,23 +220,23 @@ const Hero = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.3, duration: 1 }}
-            className="font-body mt-12 flex items-center gap-8 text-sm text-[#B8B8B8]"
+            transition={{ delay: 1, duration: 0.8 }}
+            className="font-body mt-10 flex flex-wrap items-center gap-6 text-[13px] text-[#52525b]"
           >
             <span className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#8BFF00] shadow-[0_0_8px_#8BFF00]" /> No app required
+              <span className="h-1 w-1 rounded-full bg-[#7ae02e]" /> No app required
             </span>
             <span className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#8BFF00] shadow-[0_0_8px_#8BFF00]" /> Works on iPhone &amp; Android
+              <span className="h-1 w-1 rounded-full bg-[#7ae02e]" /> Works on iPhone &amp; Android
             </span>
           </motion.div>
         </div>
 
         <motion.div
           style={{ y: parallaxY, opacity: fade }}
-          initial={{ opacity: 0, scale: 0.9, y: 60 }}
+          initial={{ opacity: 0, scale: 0.96, y: 40 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 1.1, ease: EASE }}
+          transition={{ delay: 0.5, duration: 0.9, ease: EASE }}
           className="relative flex justify-center [perspective:1200px] lg:justify-end"
         >
           <motion.div style={{ rotateX, rotateY }} className="preserve-3d relative">
@@ -268,13 +246,13 @@ const Hero = () => {
             {!tapped && (
               <motion.button
                 onClick={() => setTapped(1)}
-                exit={{ opacity: 0, y: 10 }}
-                animate={{ opacity: [0.6, 1, 0.6] }}
-                transition={{ duration: 2.2, repeat: Infinity }}
-                className="glass absolute -bottom-14 left-1/2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-[#8BFF00]"
+                exit={{ opacity: 0, y: 8 }}
+                animate={{ opacity: [0.5, 0.9, 0.5] }}
+                transition={{ duration: 2.5, repeat: Infinity }}
+                className="absolute -bottom-12 left-1/2 flex -translate-x-1/2 items-center gap-2 whitespace-nowrap rounded-lg border border-white/[0.08] bg-[#111111]/90 px-4 py-2 text-[11px] font-medium uppercase tracking-wider text-[#a1a1aa] backdrop-blur-sm"
                 data-testid="hero-tap-hint"
               >
-                <MousePointerClick size={14} /> Tap the stand
+                <MousePointerClick size={13} /> Tap the card
               </motion.button>
             )}
           </AnimatePresence>
@@ -285,3 +263,5 @@ const Hero = () => {
 };
 
 export default Hero;
+
+

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
-import { ArrowRight, CheckCircle2, Phone, Mail, MapPin } from "lucide-react";
+import { ArrowRight, CheckCircle2, MessageCircle, Mail, MapPin } from "lucide-react";
 import { Chapter, Reveal } from "./shared";
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -10,9 +10,9 @@ const INITIAL = { name: "", business_name: "", business_type: "", phone: "", ema
 
 const Field = ({ label, ...props }) => (
   <label className="block">
-    <span className="font-body mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#B8B8B8]">{label}</span>
+    <span className="font-body mb-1.5 block text-xs font-medium text-[#71717a]">{label}</span>
     <input
-      className="w-full rounded-xl border border-white/10 bg-[#0e0e0e] px-4 py-3.5 text-sm text-white outline-none transition-[border-color,box-shadow] duration-300 placeholder:text-[#5c5c5c] focus:border-[#8BFF00] focus:shadow-[0_0_0_3px_rgba(139,255,0,0.12)]"
+      className="w-full rounded-lg border border-white/[0.08] bg-[#111111] px-3.5 py-2.5 text-sm text-white outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-[#52525b] focus:border-[#7ae02e]/50 focus:shadow-[0_0_0_3px_rgba(122,224,46,0.08)]"
       {...props}
     />
   </label>
@@ -32,7 +32,7 @@ const Contact = () => {
       await axios.post(`${API}/demo`, form);
       setDone(true);
       setForm(INITIAL);
-      toast.success("Demo booked — we'll reach out within 24 hours.");
+      toast.success("Request received. We will reach out within 24 hours.");
     } catch (err) {
       toast.error("Something went wrong. Please try again.");
     } finally {
@@ -41,76 +41,89 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="relative overflow-hidden bg-black py-24 md:py-32" data-testid="contact-section">
-      <div className="pointer-events-none absolute -left-40 top-0 h-[500px] w-[500px] rounded-full bg-[#8BFF00]/[0.06] blur-[130px]" />
-      <div className="relative mx-auto grid max-w-7xl grid-cols-1 gap-16 px-6 md:px-12 lg:grid-cols-2 lg:gap-12">
+    <section id="contact" className="relative overflow-hidden bg-[#090909] py-20 md:py-28" data-testid="contact-section">
+      <div className="dot-bg pointer-events-none absolute inset-0 opacity-40" />
+      <div className="relative mx-auto grid max-w-6xl grid-cols-1 gap-12 px-6 md:px-8 lg:grid-cols-2 lg:gap-10">
         <div className="flex flex-col justify-center">
           <Chapter
-            number="CH.10"
-            label="Book A Demo"
-            title={<>Ready to grow <span className="text-gradient-green">your reviews?</span></>}
-            sub="Tell us about your business and we'll show you exactly how TapReach would look on your counter — free, no commitment."
+            number="10"
+            label="Free Mockup"
+            title={<>Get your TapReach <span className="text-gradient-green">mockup.</span></>}
+            sub="Tell us your business name and product interest. We will share a custom preview and the best setup for your review link before you pay."
           />
-          <Reveal delay={0.2}>
-            <div className="font-body mt-10 space-y-4 text-sm text-[#B8B8B8]">
-              <p className="flex items-center gap-3"><Phone size={16} className="text-[#8BFF00]" /> +91 98765 43210</p>
-              <p className="flex items-center gap-3"><Mail size={16} className="text-[#8BFF00]" /> hello@tapreach.in</p>
-              <p className="flex items-center gap-3"><MapPin size={16} className="text-[#8BFF00]" /> Serving 60+ cities across India</p>
+          <Reveal delay={0.15}>
+            <div className="font-body mt-8 space-y-3 text-sm text-[#71717a]">
+              <p className="flex flex-wrap items-center gap-2.5">
+                <MessageCircle size={15} className="text-[#7ae02e]" />
+                <a href="https://wa.me/919953070340" target="_blank" rel="noopener noreferrer" className="transition-colors duration-200 hover:text-white">+91 99530 70340</a>
+                <span className="text-[#3f3f46]">·</span>
+                <a href="https://wa.me/917000768428" target="_blank" rel="noopener noreferrer" className="transition-colors duration-200 hover:text-white">+91 70007 68428</a>
+              </p>
+              <p className="flex items-center gap-2.5">
+                <Mail size={15} className="text-[#7ae02e]" />
+                <a href="mailto:tapreach.co@gmail.com" className="transition-colors duration-200 hover:text-white">tapreach.co@gmail.com</a>
+              </p>
+              <p className="flex items-center gap-2.5"><MapPin size={15} className="text-[#7ae02e]" /> Delhi NCR</p>
+              <div className="grid gap-2 pt-3 text-xs text-[#a1a1aa] sm:grid-cols-3">
+                <span className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2.5">Free design preview</span>
+                <span className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2.5">Ready in 3-5 days</span>
+                <span className="rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2.5">NFC + QR setup</span>
+              </div>
             </div>
           </Reveal>
         </div>
 
-        <Reveal delay={0.1}>
-          <div className="glass rounded-[2rem] p-8 md:p-10" data-testid="contact-form-card">
+        <Reveal delay={0.08}>
+          <div className="surface rounded-xl p-6 md:p-8" data-testid="contact-form-card">
             {done ? (
-              <div className="flex h-full min-h-[420px] flex-col items-center justify-center text-center" data-testid="contact-success">
-                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-[#8BFF00]/15">
-                  <CheckCircle2 size={30} className="text-[#8BFF00]" />
+              <div className="flex h-full min-h-[380px] flex-col items-center justify-center text-center" data-testid="contact-success">
+                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#7ae02e]/10">
+                  <CheckCircle2 size={24} className="text-[#7ae02e]" />
                 </span>
-                <h3 className="mt-6 text-2xl font-bold text-white">Demo booked.</h3>
-                <p className="font-body mt-3 max-w-sm text-sm leading-relaxed text-[#B8B8B8]">
-                  Our team will call you within 24 hours to schedule your free personalized demo.
+                <h3 className="mt-5 text-xl font-semibold text-white">Request received.</h3>
+                <p className="font-body mt-2 max-w-sm text-sm leading-relaxed text-[#71717a]">
+                  Our team will call you within 24 hours with your custom mockup and next steps.
                 </p>
                 <button
                   onClick={() => setDone(false)}
-                  className="mt-8 rounded-full border border-white/15 px-6 py-2.5 text-sm font-bold text-white transition-colors duration-300 hover:bg-white/10"
+                  className="mt-6 rounded-lg border border-white/[0.1] px-5 py-2 text-sm font-medium text-white transition-colors duration-200 hover:bg-white/[0.04]"
                   data-testid="contact-book-another-btn"
                 >
-                  Book another demo
+                  Send another request
                 </button>
               </div>
             ) : (
-              <form onSubmit={submit} className="space-y-5" data-testid="contact-form">
-                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+              <form onSubmit={submit} className="space-y-4" data-testid="contact-form">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <Field label="Name" required placeholder="Your name" value={form.name} onChange={set("name")} data-testid="contact-name-input" />
                   <Field label="Business Name" required placeholder="Your business" value={form.business_name} onChange={set("business_name")} data-testid="contact-business-input" />
                 </div>
-                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <Field label="Business Type" required placeholder="Salon, gym, cafe…" value={form.business_type} onChange={set("business_type")} data-testid="contact-type-input" />
                   <Field label="City" required placeholder="Your city" value={form.city} onChange={set("city")} data-testid="contact-city-input" />
                 </div>
-                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                   <Field label="Phone" required type="tel" placeholder="+91" value={form.phone} onChange={set("phone")} data-testid="contact-phone-input" />
                   <Field label="Email" required type="email" placeholder="you@business.com" value={form.email} onChange={set("email")} data-testid="contact-email-input" />
                 </div>
                 <label className="block">
-                  <span className="font-body mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-[#B8B8B8]">Message</span>
+                  <span className="font-body mb-1.5 block text-xs font-medium text-[#71717a]">Message</span>
                   <textarea
                     rows={4}
-                    placeholder="Tell us about your goals…"
+                    placeholder="Example: I want 1 Premium card for my salon reception."
                     value={form.message}
                     onChange={set("message")}
-                    className="w-full resize-none rounded-xl border border-white/10 bg-[#0e0e0e] px-4 py-3.5 text-sm text-white outline-none transition-[border-color,box-shadow] duration-300 placeholder:text-[#5c5c5c] focus:border-[#8BFF00] focus:shadow-[0_0_0_3px_rgba(139,255,0,0.12)]"
+                    className="w-full resize-none rounded-lg border border-white/[0.08] bg-[#111111] px-3.5 py-2.5 text-sm text-white outline-none transition-[border-color,box-shadow] duration-200 placeholder:text-[#52525b] focus:border-[#7ae02e]/50 focus:shadow-[0_0_0_3px_rgba(122,224,46,0.08)]"
                     data-testid="contact-message-input"
                   />
                 </label>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#8BFF00] to-[#65E600] py-4 text-base font-bold text-black shadow-[0_0_24px_rgba(139,255,0,0.3)] transition-[box-shadow,transform,opacity] duration-300 hover:shadow-[0_0_48px_rgba(139,255,0,0.55)] active:scale-[0.98] disabled:opacity-60"
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#7ae02e] py-3 text-sm font-semibold text-[#090909] transition-[background-color,opacity] duration-200 hover:bg-[#8bff00] active:opacity-90 disabled:opacity-50"
                   data-testid="contact-submit-btn"
                 >
-                  {loading ? "Booking…" : (<>Book Free Demo <ArrowRight size={18} strokeWidth={2.5} /></>)}
+                  {loading ? "Sending..." : (<>Get Free Mockup <ArrowRight size={16} strokeWidth={2.5} /></>)}
                 </button>
               </form>
             )}

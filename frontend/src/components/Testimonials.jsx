@@ -1,64 +1,45 @@
-import { Star, Quote } from "lucide-react";
+import { CheckCircle2, Smartphone, Clock } from "lucide-react";
 import { Chapter, Reveal } from "./shared";
 
-const TESTIMONIALS = [
+const PROMISES = [
   {
-    quote: "We went from 3 reviews a month to 40. The stand paid for itself in the first week — guests actually enjoy tapping it.",
-    name: "Aarav Mehta",
-    business: "Luxe Salon & Spa",
-    city: "Mumbai",
-    initials: "AM",
+    icon: CheckCircle2,
+    title: "You approve before we print",
+    body: "You see and sign off on the final design before a single card goes to production. No surprises, no reprints.",
   },
   {
-    quote: "Members tap after every workout while the endorphins are high. Our Google rating jumped from 4.1 to 4.8 in two months.",
-    name: "Priya Sharma",
-    business: "IronWorks Fitness",
-    city: "Bengaluru",
-    initials: "PS",
+    icon: Smartphone,
+    title: "Tested on iPhone and Android",
+    body: "Every card is quality-checked on both platforms before it reaches your counter, so the first tap always works.",
   },
   {
-    quote: "It looks like it belongs on our counter. Customers ask about it constantly — and then they leave a review. Perfect loop.",
-    name: "Rohan Kapoor",
-    business: "Ember & Oak Cafe",
-    city: "Delhi",
-    initials: "RK",
+    icon: Clock,
+    title: "Delhi-based, fast turnaround",
+    body: "Cards are designed, programmed and delivered within days of approval — not weeks.",
   },
 ];
 
 const Testimonials = () => (
-  <section className="relative bg-[#0B0B0B] py-24 md:py-32" data-testid="testimonials-section">
-    <div className="mx-auto max-w-7xl px-6 md:px-12">
+  <section className="relative bg-[#111111] py-20 md:py-28" data-testid="testimonials-section">
+    <div className="mx-auto max-w-6xl px-6 md:px-8">
       <Chapter
-        number="CH.07"
-        label="Testimonials"
+        number="07"
+        label="Our Promise"
         align="center"
-        title={<>Owners who stopped <span className="text-gradient-green">asking</span> for reviews.</>}
+        title={<>Built for owners who <span className="text-gradient-green">stopped asking</span> for reviews.</>}
       />
-      <div className="mt-16 grid grid-cols-1 gap-6 md:grid-cols-3">
-        {TESTIMONIALS.map((t, i) => (
-          <Reveal key={t.name} delay={i * 0.12}>
+      <div className="mt-14 grid grid-cols-1 gap-4 md:grid-cols-3">
+        {PROMISES.map((p, i) => (
+          <Reveal key={p.title} delay={i * 0.08}>
             <figure
-              className="glass relative flex h-full flex-col rounded-3xl p-8 transition-[border-color,transform] duration-500 hover:-translate-y-2 hover:border-[#8BFF00]/25"
-              data-testid={`testimonial-${i + 1}`}
+              className="surface surface-hover relative flex h-full flex-col rounded-xl p-6"
+              data-testid={`promise-${i + 1}`}
             >
-              <Quote size={26} className="text-[#8BFF00]/40" fill="currentColor" strokeWidth={0} />
-              <blockquote className="font-body mt-5 flex-1 text-base leading-relaxed text-white/90">"{t.quote}"</blockquote>
-              <div className="mt-6 flex gap-1">
-                {[0, 1, 2, 3, 4].map((s) => (
-                  <Star key={s} size={14} fill="#8BFF00" stroke="#8BFF00" />
-                ))}
-              </div>
-              <figcaption className="mt-6 flex items-center gap-4 border-t border-white/8 pt-6">
-                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-[#8BFF00]/25 to-[#65E600]/10 text-sm font-black text-[#8BFF00]">
-                  {t.initials}
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-white">{t.name}</p>
-                  <p className="font-body text-xs text-[#B8B8B8]">
-                    {t.business} · {t.city}
-                  </p>
-                </div>
-              </figcaption>
+              <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#7ae02e]/10 text-[#7ae02e]">
+                <p.icon size={18} strokeWidth={1.75} />
+              </span>
+              <figcaption className="mt-4 text-base font-semibold text-white">{p.title}</figcaption>
+              <p className="font-body mt-2 flex-1 text-[15px] leading-relaxed text-[#a1a1aa]">{p.body}</p>
             </figure>
           </Reveal>
         ))}

@@ -12,21 +12,21 @@ const ITEMS = [
 const Row = () => (
   <div className="flex shrink-0 items-center">
     {ITEMS.map(({ icon: Icon, label }) => (
-      <div key={label} className="mx-10 flex items-center gap-3 text-[#5c5c5c] transition-colors duration-300 hover:text-[#B8B8B8]" data-testid={`trusted-${label.toLowerCase()}`}>
-        <Icon size={22} strokeWidth={1.6} />
-        <span className="font-body text-xl font-medium tracking-wide">{label}</span>
+      <div key={label} className="mx-8 flex items-center gap-2.5 text-[#52525b] transition-colors duration-200 hover:text-[#71717a]" data-testid={`trusted-${label.toLowerCase()}`}>
+        <Icon size={18} strokeWidth={1.5} />
+        <span className="font-body text-sm font-medium">{label}</span>
       </div>
     ))}
   </div>
 );
 
 const TrustedBy = () => (
-  <section className="relative border-y border-white/5 bg-[#0B0B0B] py-12" data-testid="trusted-by-section">
-    <p className="font-body mb-8 text-center text-xs font-semibold uppercase tracking-[0.3em] text-[#5c5c5c]">
+  <section className="section-divider relative bg-[#090909] py-10" data-testid="trusted-by-section">
+    <p className="font-body mb-6 text-center text-[11px] font-medium uppercase tracking-[0.2em] text-[#52525b]">
       Trusted by local businesses everywhere
     </p>
-    <div className="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]">
-      <div className="animate-marquee flex w-max">
+    <div className="relative max-w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
+      <div className="animate-marquee flex w-max max-w-none">
         <Row />
         <Row />
       </div>

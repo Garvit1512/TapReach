@@ -27,37 +27,37 @@ const Solution = () => {
   const lineScale = useSpring(scrollYProgress, { stiffness: 80, damping: 24 });
 
   return (
-    <section className="spotlight relative bg-[#0B0B0B] py-24 md:py-32" data-testid="solution-section">
-      <div className="mx-auto max-w-7xl px-6 md:px-12">
+    <section className="spotlight relative bg-[#111111] py-20 md:py-28" data-testid="solution-section">
+      <div className="mx-auto max-w-6xl px-6 md:px-8">
         <Chapter
-          number="CH.02"
+          number="02"
           label="The Solution"
           align="center"
           title={<>One beautiful display. <span className="text-gradient-green">Zero friction.</span></>}
           sub="TapReach turns the happiest moment of the customer journey into a five-star review."
         />
 
-        <div ref={ref} className="relative mx-auto mt-20 max-w-2xl">
-          <div className="absolute left-6 top-0 h-full w-px bg-white/8 md:left-1/2" />
+        <div ref={ref} className="relative mx-auto mt-16 max-w-2xl">
+          <div className="absolute left-6 top-0 h-full w-px bg-white/[0.06] md:left-1/2" />
           <motion.div
-            className="absolute left-6 top-0 h-full w-px origin-top bg-gradient-to-b from-[#8BFF00] to-[#65E600] shadow-[0_0_12px_rgba(139,255,0,0.6)] md:left-1/2"
+            className="absolute left-6 top-0 h-full w-px origin-top bg-[#7ae02e] md:left-1/2"
             style={{ scaleY: lineScale }}
           />
-          <div className="space-y-16">
+          <div className="space-y-12">
             {STEPS.map((s, i) => (
-              <Reveal key={s.title} delay={0.05 * i}>
-                <div className={`relative flex items-start gap-8 md:w-1/2 ${i % 2 ? "md:ml-auto md:pl-14" : "md:flex-row-reverse md:pr-14 md:text-right"}`}>
+              <Reveal key={s.title} delay={0.04 * i}>
+                <div className={`relative flex items-start gap-6 md:w-1/2 ${i % 2 ? "md:ml-auto md:pl-12" : "md:flex-row-reverse md:pr-12 md:text-right"}`}>
                   <div
-                    className={`absolute left-6 top-1 z-10 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-2xl border border-[#8BFF00]/30 bg-[#0B0B0B] text-[#8BFF00] shadow-[0_0_24px_rgba(139,255,0,0.25)] ${
+                    className={`absolute left-6 top-0.5 z-10 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-lg border border-white/[0.08] bg-[#161616] text-[#7ae02e] ${
                       i % 2 ? "md:-left-0" : "md:left-auto md:-right-0 md:translate-x-1/2"
                     }`}
                   >
-                    <s.icon size={20} strokeWidth={1.8} />
+                    <s.icon size={18} strokeWidth={1.75} />
                   </div>
-                  <div className="pl-16 md:pl-0">
-                    <span className="font-body text-xs font-semibold tracking-[0.3em] text-[#8BFF00]/60">STEP {i + 1}</span>
-                    <h3 className="mt-2 text-2xl font-bold tracking-tight text-white">{s.title}</h3>
-                    <p className="font-body mt-3 text-base leading-relaxed text-[#B8B8B8]">{s.text}</p>
+                  <div className="pl-14 md:pl-0">
+                    <span className="font-body text-[11px] font-medium tabular-nums text-[#52525b]">Step {i + 1}</span>
+                    <h3 className="mt-1.5 text-xl font-semibold tracking-[-0.02em] text-white">{s.title}</h3>
+                    <p className="font-body mt-2 text-[15px] leading-relaxed text-[#71717a]">{s.text}</p>
                   </div>
                 </div>
               </Reveal>

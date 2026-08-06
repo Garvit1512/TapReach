@@ -16,32 +16,32 @@ const Faq = () => {
   const [open, setOpen] = useState(0);
 
   return (
-    <section className="relative bg-[#0B0B0B] py-24 md:py-32" data-testid="faq-section">
-      <div className="mx-auto max-w-3xl px-6 md:px-12">
-        <Chapter number="CH.09" label="FAQ" align="center" title={<>Questions, <span className="text-gradient-green">answered.</span></>} />
-        <div className="mt-14 space-y-4">
+    <section className="relative bg-[#111111] py-20 md:py-28" data-testid="faq-section">
+      <div className="mx-auto max-w-2xl px-6 md:px-8">
+        <Chapter number="09" label="FAQ" align="center" title={<>Questions, <span className="text-gradient-green">answered.</span></>} />
+        <div className="mt-12 space-y-2">
           {FAQS.map((f, i) => {
             const isOpen = open === i;
             return (
-              <Reveal key={f.q} delay={i * 0.05}>
+              <Reveal key={f.q} delay={i * 0.04}>
                 <div
-                  className={`overflow-hidden rounded-2xl border transition-[border-color,background-color] duration-300 ${
-                    isOpen ? "border-[#8BFF00]/30 bg-[#111111]" : "border-white/8 bg-[#0e0e0e] hover:border-white/20"
+                  className={`overflow-hidden rounded-xl border transition-[border-color,background-color] duration-200 ${
+                    isOpen ? "border-white/[0.12] bg-[#161616]" : "border-white/[0.06] bg-[#141414] hover:border-white/[0.1]"
                   }`}
                   data-testid={`faq-item-${i + 1}`}
                 >
                   <button
                     onClick={() => setOpen(isOpen ? -1 : i)}
-                    className="flex w-full items-center justify-between gap-4 px-7 py-5 text-left"
+                    className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
                     data-testid={`faq-question-${i + 1}`}
                   >
-                    <span className="text-base font-bold text-white md:text-lg">{f.q}</span>
+                    <span className="text-[15px] font-medium text-white">{f.q}</span>
                     <motion.span
                       animate={{ rotate: isOpen ? 45 : 0 }}
-                      transition={{ duration: 0.3, ease: EASE }}
-                      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border ${isOpen ? "border-[#8BFF00]/40 text-[#8BFF00]" : "border-white/15 text-[#B8B8B8]"}`}
+                      transition={{ duration: 0.2, ease: EASE }}
+                      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-md border ${isOpen ? "border-[#7ae02e]/30 text-[#7ae02e]" : "border-white/[0.08] text-[#71717a]"}`}
                     >
-                      <Plus size={15} strokeWidth={2.5} />
+                      <Plus size={14} strokeWidth={2} />
                     </motion.span>
                   </button>
                   <AnimatePresence initial={false}>
@@ -50,9 +50,9 @@ const Faq = () => {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.45, ease: EASE }}
+                        transition={{ duration: 0.3, ease: EASE }}
                       >
-                        <p className="font-body px-7 pb-6 text-sm leading-relaxed text-[#B8B8B8] md:text-base" data-testid={`faq-answer-${i + 1}`}>
+                        <p className="font-body px-5 pb-4 text-sm leading-relaxed text-[#71717a]" data-testid={`faq-answer-${i + 1}`}>
                           {f.a}
                         </p>
                       </motion.div>
