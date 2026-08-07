@@ -6,6 +6,12 @@
       "runtimeExecutable": "yarn",
       "runtimeArgs": ["--cwd", "frontend", "start"],
       "port": 3000
+    },
+    {
+      "name": "cms",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "cms", "run", "dev", "--", "-p", "3001"],
+      "port": 3001
     }
   ]
 }
