@@ -14,13 +14,21 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Plus } from "lucide-react";
 
-export function AddSectionMenu({ siteId, tenantId }: { siteId: string; tenantId: string }) {
+export function AddSectionMenu({
+  siteId,
+  tenantId,
+  publicPath,
+}: {
+  siteId: string;
+  tenantId: string;
+  publicPath?: string;
+}) {
   const [pending, startTransition] = useTransition();
 
   const handleAdd = (type: SectionType) => {
     startTransition(async () => {
       try {
-        await addSection(siteId, tenantId, type);
+        await addSection(siteId, tenantId, type, publicPath);
         toast.success(`${SECTION_REGISTRY[type].label} section added`);
       } catch (err) {
         toast.error(err instanceof Error ? err.message : "Failed to add section");

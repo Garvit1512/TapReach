@@ -5,7 +5,17 @@ import { createClient } from "@/lib/supabase/server";
 import { SECTION_REGISTRY } from "@/lib/sections/registry";
 import type { SectionType } from "@/lib/sections/types";
 
-export async function addSection(siteId: string, tenantId: string, type: SectionType) {
+function revalidateBoth(adminPath: string, publicPath?: string | null) {
+  revalidatePath(adminPath);
+  if (publicPath) revalidatePath(publicPath);
+}
+
+export async function addSection(
+  siteId: string,
+  tenantId: string,
+  type: SectionType,
+  publicPath?: string,
+) {
   const supabase = await createClient();
 
   const { data: existing } = await supabase
@@ -27,7 +37,7 @@ export async function addSection(siteId: string, tenantId: string, type: Section
 
   if (error) throw new Error(error.message);
 
-  revalidatePath(`/admin/tenants/${tenantId}/sites/${siteId}/builder`);
+  revalidateBoth(`/admin/tenants/${tenantId}/sites/${siteId}/builder`, publicPath);
 }
 
 export async function updateSectionContent(
@@ -35,6 +45,7 @@ export async function updateSectionContent(
   type: SectionType,
   content: Record<string, unknown>,
   revalidatePathTarget: string,
+  publicPath?: string,
 ) {
   const definition = SECTION_REGISTRY[type];
   const parsed = definition.schema.safeParse(content);
@@ -48,29 +59,30 @@ export async function updateSectionContent(
 
   if (error) throw new Error(error.message);
 
-  revalidatePath(revalidatePathTarget);
+  revalidateBoth(revalidatePathTarget, publicPath);
 }
 
-export async function removeSection(sectionId: string, revalidatePathTarget: string) {
+export async function removeSection(sectionId: string, revalidatePathTarget: string, publicPath?: string) {
   const supabase = await createClient();
   const { error } = await supabase.from("sections").delete().eq("id", sectionId);
 
   if (error) throw new Error(error.message);
 
-  revalidatePath(revalidatePathTarget);
+  revalidateBoth(revalidatePathTarget, publicPath);
 }
 
 export async function toggleSectionVisibility(
   sectionId: string,
   isVisible: boolean,
   revalidatePathTarget: string,
+  publicPath?: string,
 ) {
   const supabase = await createClient();
   const { error } = await supabase.from("sections").update({ is_visible: isVisible }).eq("id", sectionId);
 
   if (error) throw new Error(error.message);
 
-  revalidatePath(revalidatePathTarget);
+  revalidateBoth(revalidatePathTarget, publicPath);
 }
 
 export async function moveSection(
@@ -78,6 +90,7 @@ export async function moveSection(
   direction: "up" | "down",
   siteId: string,
   revalidatePathTarget: string,
+  publicPath?: string,
 ) {
   const supabase = await createClient();
 
@@ -100,5 +113,5 @@ export async function moveSection(
   await supabase.from("sections").update({ position: b.position }).eq("id", a.id);
   await supabase.from("sections").update({ position: a.position }).eq("id", b.id);
 
-  revalidatePath(revalidatePathTarget);
+  revalidateBoth(revalidatePathTarget, publicPath);
 }
