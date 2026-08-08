@@ -71,7 +71,13 @@ architecture rationale — schema, RLS policy shape, AI command bar guardrails, 
    to `sites.published_snapshot`, and sets the site live — draft edits after that don't affect the
    public site until Publish is clicked again. The public route reads `published_snapshot`
    directly, not the draft tables. Restore copies an old snapshot into draft only, never live.
-5. Media library
+5. **Media library** — done. `media_assets` table + a public Supabase Storage bucket (`media`,
+   objects at `{tenant_id}/{filename}`). `MediaPicker` (upload + pick-from-library dialog) is wired
+   into every image field: Hero, About, Gallery, Testimonials (added `avatarUrl`). Gotcha worth
+   remembering: `storage.buckets` has RLS enabled by default with **no policies**, which makes the
+   Storage API fail with a misleading "Bucket not found" for every non-superuser request — even
+   with correct `storage.objects` policies — until a read policy is added on `storage.buckets`
+   itself (see migration 0005's `media_bucket_read`).
 6. AI command bar (Claude API, tool-calling)
 7. Theme editor
 8. Analytics + redirect layer (unifies NFC tap / QR scan tracking with website analytics via
