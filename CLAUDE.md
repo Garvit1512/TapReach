@@ -65,12 +65,12 @@ architecture rationale — schema, RLS policy shape, AI command bar guardrails, 
    add/edit/reorder/toggle-visibility/delete, all Server Actions validated against the registry.
 3. **Public renderer + live preview** — done. `app/s/[subdomain]/page.tsx` (public, anon-readable
    via RLS, gated on `sites.status = 'live'`), staff-only full-page preview at
-   `.../sites/[siteId]/preview`, both sharing `lib/sections/SitePage.tsx`. A "Go live"/"Take
-   offline" toggle is a **stopgap** publish mechanism: the public route currently reads draft
-   `sections` directly (no snapshot yet), so edits to a live site go out immediately. Phase 4
-   replaces this with real draft/published separation via `site_versions` — don't be surprised
-   the public route's data source changes there.
-4. Publish + version history
+   `.../sites/[siteId]/preview`, both sharing `lib/sections/SitePage.tsx`.
+4. **Publish + version history** — done. `site_versions` (immutable snapshots) +
+   `sites.published_snapshot`. Publish snapshots current `sections`/`site_themes`/`seo`, writes it
+   to `sites.published_snapshot`, and sets the site live — draft edits after that don't affect the
+   public site until Publish is clicked again. The public route reads `published_snapshot`
+   directly, not the draft tables. Restore copies an old snapshot into draft only, never live.
 5. Media library
 6. AI command bar (Claude API, tool-calling)
 7. Theme editor
