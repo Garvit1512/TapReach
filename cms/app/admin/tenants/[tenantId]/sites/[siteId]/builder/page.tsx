@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AddSectionMenu } from "./add-section-menu";
 import { SectionItem } from "./section-item";
-import { PublishToggle } from "../publish-toggle";
+import { PublishControls } from "../publish-toggle";
 import type { Section } from "@/lib/sections/types";
 import { ExternalLink } from "lucide-react";
 
@@ -44,6 +44,12 @@ export default async function BuilderPage(
           >
             Full preview
           </Link>
+          <Link
+            href={`/admin/tenants/${tenantId}/sites/${siteId}/versions`}
+            className="text-sm text-muted-foreground hover:underline"
+          >
+            Version history
+          </Link>
           {site.status === "live" && (
             <a
               href={publicPath}
@@ -54,8 +60,13 @@ export default async function BuilderPage(
               View live site <ExternalLink className="size-3.5" />
             </a>
           )}
-          <PublishToggle siteId={siteId} tenantId={tenantId} status={site.status} />
-          <AddSectionMenu siteId={siteId} tenantId={tenantId} publicPath={publicPath} />
+          <PublishControls
+            siteId={siteId}
+            tenantId={tenantId}
+            status={site.status}
+            hasPublishedSnapshot={!!site.published_snapshot}
+          />
+          <AddSectionMenu siteId={siteId} tenantId={tenantId} />
         </div>
       </div>
 
@@ -66,7 +77,6 @@ export default async function BuilderPage(
             section={section as Section}
             siteId={siteId}
             revalidatePathTarget={revalidatePathTarget}
-            publicPath={publicPath}
           />
         ))}
         {(sections ?? []).length === 0 && (

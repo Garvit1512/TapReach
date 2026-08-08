@@ -4,11 +4,17 @@ import { createClient } from "@/lib/supabase/server";
 import { SitePage } from "@/lib/sections/SitePage";
 import type { Section } from "@/lib/sections/types";
 
+type Snapshot = {
+  sections: Omit<Section, "id" | "site_id" | "tenant_id">[];
+  theme: Record<string, unknown>;
+  seo: { title?: string; description?: string };
+};
+
 async function getSite(subdomain: string) {
   const supabase = await createClient();
   const { data: site } = await supabase
     .from("sites")
-    .select("id, name, seo")
+    .select("id, name, published_snapshot")
     .eq("subdomain", subdomain)
     .maybeSingle();
 
@@ -21,13 +27,13 @@ export async function generateMetadata(
   const { subdomain } = await props.params;
   const site = await getSite(subdomain);
 
-  if (!site) return {};
+  if (!site || !site.published_snapshot) return {};
 
-  const seo = (site.seo ?? {}) as { title?: string; description?: string };
+  const snapshot = site.published_snapshot as Snapshot;
 
   return {
-    title: seo.title || site.name,
-    description: seo.description || undefined,
+    title: snapshot.seo?.title || site.name,
+    description: snapshot.seo?.description || undefined,
   };
 }
 
@@ -35,16 +41,17 @@ export default async function PublicSitePage(props: PageProps<"/s/[subdomain]">)
   const { subdomain } = await props.params;
   const site = await getSite(subdomain);
 
-  if (!site) {
+  if (!site || !site.published_snapshot) {
     notFound();
   }
 
-  const supabase = await createClient();
-  const { data: sections } = await supabase
-    .from("sections")
-    .select("*")
-    .eq("site_id", site.id)
-    .order("position", { ascending: true });
+  const snapshot = site.published_snapshot as Snapshot;
+  const sections: Section[] = snapshot.sections.map((s, i) => ({
+    ...s,
+    id: `published-${i}`,
+    site_id: site.id,
+    tenant_id: "",
+  }));
 
-  return <SitePage sections={(sections ?? []) as Section[]} />;
+  return <SitePage sections={sections} />;
 }

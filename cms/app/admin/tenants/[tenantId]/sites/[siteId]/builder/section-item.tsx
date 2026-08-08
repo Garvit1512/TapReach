@@ -14,12 +14,10 @@ export function SectionItem({
   section,
   siteId,
   revalidatePathTarget,
-  publicPath,
 }: {
   section: Section;
   siteId: string;
   revalidatePathTarget: string;
-  publicPath?: string;
 }) {
   const [pending, startTransition] = useTransition();
   const definition = SECTION_REGISTRY[section.type];
@@ -27,13 +25,13 @@ export function SectionItem({
 
   const move = (direction: "up" | "down") => {
     startTransition(async () => {
-      await moveSection(section.id, direction, siteId, revalidatePathTarget, publicPath);
+      await moveSection(section.id, direction, siteId, revalidatePathTarget);
     });
   };
 
   const toggleVisible = (checked: boolean) => {
     startTransition(async () => {
-      await toggleSectionVisibility(section.id, checked, revalidatePathTarget, publicPath);
+      await toggleSectionVisibility(section.id, checked, revalidatePathTarget);
     });
   };
 
@@ -41,7 +39,7 @@ export function SectionItem({
     if (!confirm(`Remove the ${definition.label} section?`)) return;
     startTransition(async () => {
       try {
-        await removeSection(section.id, revalidatePathTarget, publicPath);
+        await removeSection(section.id, revalidatePathTarget);
         toast.success("Section removed");
       } catch (err) {
         toast.error(err instanceof Error ? err.message : "Failed to remove section");
@@ -50,7 +48,7 @@ export function SectionItem({
   };
 
   const handleSave = async (content: Record<string, unknown>) => {
-    await updateSectionContent(section.id, section.type, content, revalidatePathTarget, publicPath);
+    await updateSectionContent(section.id, section.type, content, revalidatePathTarget);
   };
 
   return (
