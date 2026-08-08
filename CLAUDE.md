@@ -63,7 +63,13 @@ architecture rationale — schema, RLS policy shape, AI command bar guardrails, 
    tables; `lib/sections/registry.ts` maps each of the 9 section types to its Zod schema, default
    content, `Renderer`, and `EditorForm`; tenant → sites → builder pages with manual
    add/edit/reorder/toggle-visibility/delete, all Server Actions validated against the registry.
-3. Public renderer + live preview
+3. **Public renderer + live preview** — done. `app/s/[subdomain]/page.tsx` (public, anon-readable
+   via RLS, gated on `sites.status = 'live'`), staff-only full-page preview at
+   `.../sites/[siteId]/preview`, both sharing `lib/sections/SitePage.tsx`. A "Go live"/"Take
+   offline" toggle is a **stopgap** publish mechanism: the public route currently reads draft
+   `sections` directly (no snapshot yet), so edits to a live site go out immediately. Phase 4
+   replaces this with real draft/published separation via `site_versions` — don't be surprised
+   the public route's data source changes there.
 4. Publish + version history
 5. Media library
 6. AI command bar (Claude API, tool-calling)
