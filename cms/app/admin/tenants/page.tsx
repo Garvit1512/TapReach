@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getCurrentUser } from "@/lib/auth/session";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -40,7 +41,11 @@ export default async function TenantsPage() {
         <TableBody>
           {(tenants ?? []).map((t) => (
             <TableRow key={t.id}>
-              <TableCell className="font-medium">{t.name}</TableCell>
+              <TableCell className="font-medium">
+                <Link href={`/admin/tenants/${t.id}`} className="hover:underline">
+                  {t.name}
+                </Link>
+              </TableCell>
               <TableCell className="capitalize">{t.vertical}</TableCell>
               <TableCell>
                 <Badge variant={t.care_plan_status === "active" ? "default" : "secondary"}>
