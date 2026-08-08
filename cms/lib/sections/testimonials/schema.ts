@@ -5,6 +5,7 @@ export const testimonialItemSchema = z.object({
   name: z.string().default(""),
   business: z.string().default(""),
   rating: z.number().min(1).max(5).default(5),
+  avatarUrl: z.string().default(""),
 });
 
 export const testimonialsSchema = z.object({

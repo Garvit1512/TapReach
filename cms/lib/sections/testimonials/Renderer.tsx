@@ -8,9 +8,15 @@ export function TestimonialsRenderer({ content }: { content: TestimonialsContent
         {content.items.map((t, i) => (
           <figure key={i} className="rounded-md border p-4">
             <blockquote className="text-sm">&ldquo;{t.quote}&rdquo;</blockquote>
-            <figcaption className="mt-3 text-xs text-muted-foreground">
-              {t.name}
-              {t.business && ` · ${t.business}`}
+            <figcaption className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+              {t.avatarUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={t.avatarUrl} alt={t.name} className="size-8 rounded-full object-cover" />
+              ) : null}
+              <span>
+                {t.name}
+                {t.business && ` · ${t.business}`}
+              </span>
             </figcaption>
           </figure>
         ))}

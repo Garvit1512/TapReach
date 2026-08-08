@@ -27,11 +27,16 @@ export default async function TenantDetailPage(props: PageProps<"/admin/tenants/
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-xl font-semibold">{tenant.name}</h1>
-        <p className="text-sm capitalize text-muted-foreground">
-          {tenant.vertical} · care plan: {tenant.care_plan_status}
-        </p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-xl font-semibold">{tenant.name}</h1>
+          <p className="text-sm capitalize text-muted-foreground">
+            {tenant.vertical} · care plan: {tenant.care_plan_status}
+          </p>
+        </div>
+        <Link href={`/admin/tenants/${tenantId}/media`} className="text-sm text-muted-foreground hover:underline">
+          Media library
+        </Link>
       </div>
 
       <div>

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { MediaPicker } from "@/lib/media/MediaPicker";
 
 export function HeroEditorForm({
   content,
@@ -41,11 +42,10 @@ export function HeroEditorForm({
         </div>
       </div>
       <div className="space-y-1.5">
-        <Label>Background image URL</Label>
-        <Input
+        <Label>Background image</Label>
+        <MediaPicker
           value={draft.backgroundImageUrl}
-          onChange={(e) => setDraft({ ...draft, backgroundImageUrl: e.target.value })}
-          placeholder="https://..."
+          onChange={(backgroundImageUrl) => setDraft({ ...draft, backgroundImageUrl })}
         />
       </div>
       <Button onClick={save} disabled={saving}>

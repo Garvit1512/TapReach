@@ -5,6 +5,7 @@ import { useEditorSave, ArrayField } from "../shared";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { MediaPicker } from "@/lib/media/MediaPicker";
 
 export function GalleryEditorForm({
   content,
@@ -28,7 +29,7 @@ export function GalleryEditorForm({
         newItem={() => ({ url: "", alt: "" })}
         renderItem={(item, _i, update) => (
           <>
-            <Input value={item.url} onChange={(e) => update({ url: e.target.value })} placeholder="Image URL" />
+            <MediaPicker value={item.url} onChange={(url) => update({ url })} />
             <Input value={item.alt} onChange={(e) => update({ alt: e.target.value })} placeholder="Alt text" />
           </>
         )}

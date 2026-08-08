@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { MediaPicker } from "@/lib/media/MediaPicker";
 
 export function TestimonialsEditorForm({
   content,
@@ -26,7 +27,7 @@ export function TestimonialsEditorForm({
         label="Testimonials"
         items={draft.items}
         onChange={(items) => setDraft({ ...draft, items })}
-        newItem={() => ({ quote: "", name: "", business: "", rating: 5 })}
+        newItem={() => ({ quote: "", name: "", business: "", rating: 5, avatarUrl: "" })}
         renderItem={(item, _i, update) => (
           <>
             <Textarea rows={2} value={item.quote} onChange={(e) => update({ quote: e.target.value })} placeholder="Quote" />
@@ -34,6 +35,7 @@ export function TestimonialsEditorForm({
               <Input value={item.name} onChange={(e) => update({ name: e.target.value })} placeholder="Name" />
               <Input value={item.business} onChange={(e) => update({ business: e.target.value })} placeholder="Business" />
             </div>
+            <MediaPicker value={item.avatarUrl} onChange={(avatarUrl) => update({ avatarUrl })} />
           </>
         )}
       />

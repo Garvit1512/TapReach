@@ -6,6 +6,7 @@ import { SectionItem } from "./section-item";
 import { PublishControls } from "../publish-toggle";
 import type { Section } from "@/lib/sections/types";
 import { ExternalLink } from "lucide-react";
+import { TenantProvider } from "@/lib/media/TenantContext";
 
 export default async function BuilderPage(
   props: PageProps<"/admin/tenants/[tenantId]/sites/[siteId]/builder">,
@@ -29,62 +30,64 @@ export default async function BuilderPage(
   const publicPath = `/s/${site.subdomain}`;
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <Link href={`/admin/tenants/${tenantId}`} className="text-sm text-muted-foreground hover:underline">
-            ← Back to tenant
-          </Link>
-          <h1 className="text-xl font-semibold">{site.name}</h1>
-        </div>
-        <div className="flex items-center gap-3">
-          <Link
-            href={`/admin/tenants/${tenantId}/sites/${siteId}/preview`}
-            className="text-sm text-muted-foreground hover:underline"
-          >
-            Full preview
-          </Link>
-          <Link
-            href={`/admin/tenants/${tenantId}/sites/${siteId}/versions`}
-            className="text-sm text-muted-foreground hover:underline"
-          >
-            Version history
-          </Link>
-          {site.status === "live" && (
-            <a
-              href={publicPath}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-sm text-muted-foreground hover:underline"
+    <TenantProvider tenantId={tenantId}>
+      <div className="space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <Link href={`/admin/tenants/${tenantId}`} className="text-sm text-muted-foreground hover:underline">
+              ← Back to tenant
+            </Link>
+            <h1 className="text-xl font-semibold">{site.name}</h1>
+          </div>
+          <div className="flex items-center gap-3">
+            <Link
+              href={`/admin/tenants/${tenantId}/sites/${siteId}/preview`}
+              className="text-sm text-muted-foreground hover:underline"
             >
-              View live site <ExternalLink className="size-3.5" />
-            </a>
+              Full preview
+            </Link>
+            <Link
+              href={`/admin/tenants/${tenantId}/sites/${siteId}/versions`}
+              className="text-sm text-muted-foreground hover:underline"
+            >
+              Version history
+            </Link>
+            {site.status === "live" && (
+              <a
+                href={publicPath}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 text-sm text-muted-foreground hover:underline"
+              >
+                View live site <ExternalLink className="size-3.5" />
+              </a>
+            )}
+            <PublishControls
+              siteId={siteId}
+              tenantId={tenantId}
+              status={site.status}
+              hasPublishedSnapshot={!!site.published_snapshot}
+            />
+            <AddSectionMenu siteId={siteId} tenantId={tenantId} />
+          </div>
+        </div>
+
+        <div className="space-y-4">
+          {(sections ?? []).map((section) => (
+            <SectionItem
+              key={section.id}
+              section={section as Section}
+              siteId={siteId}
+              revalidatePathTarget={revalidatePathTarget}
+            />
+          ))}
+          {(sections ?? []).length === 0 && (
+            <p className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
+              No sections yet — add one to start building this site.
+            </p>
           )}
-          <PublishControls
-            siteId={siteId}
-            tenantId={tenantId}
-            status={site.status}
-            hasPublishedSnapshot={!!site.published_snapshot}
-          />
-          <AddSectionMenu siteId={siteId} tenantId={tenantId} />
         </div>
       </div>
-
-      <div className="space-y-4">
-        {(sections ?? []).map((section) => (
-          <SectionItem
-            key={section.id}
-            section={section as Section}
-            siteId={siteId}
-            revalidatePathTarget={revalidatePathTarget}
-          />
-        ))}
-        {(sections ?? []).length === 0 && (
-          <p className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">
-            No sections yet — add one to start building this site.
-          </p>
-        )}
-      </div>
-    </div>
+    </TenantProvider>
   );
 }

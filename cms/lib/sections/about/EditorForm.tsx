@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { MediaPicker } from "@/lib/media/MediaPicker";
 
 export function AboutEditorForm({
   content,
@@ -27,8 +28,8 @@ export function AboutEditorForm({
         <Textarea rows={4} value={draft.body} onChange={(e) => setDraft({ ...draft, body: e.target.value })} />
       </div>
       <div className="space-y-1.5">
-        <Label>Image URL</Label>
-        <Input value={draft.imageUrl} onChange={(e) => setDraft({ ...draft, imageUrl: e.target.value })} placeholder="https://..." />
+        <Label>Image</Label>
+        <MediaPicker value={draft.imageUrl} onChange={(imageUrl) => setDraft({ ...draft, imageUrl })} />
       </div>
       <Button onClick={save} disabled={saving}>
         {saving ? "Saving..." : "Save"}
