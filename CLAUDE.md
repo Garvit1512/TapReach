@@ -59,7 +59,10 @@ architecture rationale — schema, RLS policy shape, AI command bar guardrails, 
 
 1. **Auth + multi-tenancy foundation** — done. `profiles`, `staff_members`, `tenants`,
    `tenant_memberships`, `staff_tenant_assignments`, RLS policies, login, role-aware admin shell.
-2. Website builder core (sites/sections/themes, manual CRUD, no AI yet)
+2. **Website builder core** — done. `sites`, `sections`, `site_themes`, `starter_templates`
+   tables; `lib/sections/registry.ts` maps each of the 9 section types to its Zod schema, default
+   content, `Renderer`, and `EditorForm`; tenant → sites → builder pages with manual
+   add/edit/reorder/toggle-visibility/delete, all Server Actions validated against the registry.
 3. Public renderer + live preview
 4. Publish + version history
 5. Media library
@@ -72,8 +75,7 @@ architecture rationale — schema, RLS policy shape, AI command bar guardrails, 
 Core modeling decision: each website section (Hero, About, Services, Gallery, Pricing,
 Testimonials, Contact, FAQ, Footer) is one row in `sections` with a `content jsonb` column
 validated by a per-section-type Zod schema — the single source of truth shared by the AI tool
-layer, the manual editor forms, and the renderer components (`lib/sections/registry.ts` once
-Phase 2 lands).
+layer, the manual editor forms, and the renderer components (`lib/sections/registry.ts`).
 
 ## General
 
