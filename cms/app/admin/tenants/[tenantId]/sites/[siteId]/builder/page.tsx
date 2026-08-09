@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { AddSectionMenu } from "./add-section-menu";
 import { SectionItem } from "./section-item";
+import { CommandBar } from "./command-bar";
 import { PublishControls } from "../publish-toggle";
 import type { Section } from "@/lib/sections/types";
 import { ExternalLink } from "lucide-react";
@@ -47,6 +48,12 @@ export default async function BuilderPage(
               Full preview
             </Link>
             <Link
+              href={`/admin/tenants/${tenantId}/sites/${siteId}/theme`}
+              className="text-sm text-muted-foreground hover:underline"
+            >
+              Theme
+            </Link>
+            <Link
               href={`/admin/tenants/${tenantId}/sites/${siteId}/versions`}
               className="text-sm text-muted-foreground hover:underline"
             >
@@ -71,6 +78,8 @@ export default async function BuilderPage(
             <AddSectionMenu siteId={siteId} tenantId={tenantId} />
           </div>
         </div>
+
+        <CommandBar siteId={siteId} tenantId={tenantId} />
 
         <div className="space-y-4">
           {(sections ?? []).map((section) => (

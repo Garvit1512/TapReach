@@ -53,5 +53,5 @@ export default async function PublicSitePage(props: PageProps<"/s/[subdomain]">)
     tenant_id: "",
   }));
 
-  return <SitePage sections={sections} />;
+  return <SitePage sections={sections} theme={snapshot.theme} siteId={site.id} />;
 }

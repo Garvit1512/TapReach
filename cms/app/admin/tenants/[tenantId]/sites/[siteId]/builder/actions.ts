@@ -102,3 +102,20 @@ export async function moveSection(
 
   revalidatePath(revalidatePathTarget);
 }
+
+export async function reorderSections(siteId: string, orderedSectionIds: string[], revalidatePathTarget: string) {
+  const supabase = await createClient();
+
+  const { data: existing } = await supabase.from("sections").select("id").eq("site_id", siteId);
+  const existingIds = new Set((existing ?? []).map((s) => s.id));
+
+  if (orderedSectionIds.length !== existingIds.size || orderedSectionIds.some((id) => !existingIds.has(id))) {
+    throw new Error("orderedSectionIds must list every section of this site exactly once.");
+  }
+
+  await Promise.all(
+    orderedSectionIds.map((id, position) => supabase.from("sections").update({ position }).eq("id", id)),
+  );
+
+  revalidatePath(revalidatePathTarget);
+}
