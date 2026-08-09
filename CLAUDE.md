@@ -78,8 +78,31 @@ architecture rationale — schema, RLS policy shape, AI command bar guardrails, 
    Storage API fail with a misleading "Bucket not found" for every non-superuser request — even
    with correct `storage.objects` policies — until a read policy is added on `storage.buckets`
    itself (see migration 0005's `media_bucket_read`).
-6. AI command bar (Claude API, tool-calling)
-7. Theme editor
+6. **AI command bar** — code complete, live verification pending. `ai_command_log` (audit trail +
+   undo source), `lib/ai/tools.ts` (fixed 7-tool set: `update_section_content`, `add_section`,
+   `remove_section`, `reorder_sections`, `update_theme`, `update_seo`, `request_clarification` — no
+   raw-SQL/arbitrary-query tool exists), `lib/ai/context.ts` (assembles system prompt from current
+   sections/theme/SEO + `z.toJSONSchema()` of each section schema), `/api/ai/command` route (manual
+   tool-calling loop, `claude-sonnet-5`, pre-LLM auth/write-access check, ≤20 tool calls / ≤12
+   turns, every tool re-verifies `section_id` belongs to `site_id` before writing — never trusts
+   IDs the model echoes back), command bar UI + "Undo last AI change" in the builder page. Every
+   layer up to the actual LLM call has been verified (auth guard, RLS, tool validation, error
+   handling); the live round-trip is blocked on the Anthropic account needing API credits
+   (console.anthropic.com → Plans & Billing) — not a code issue. Re-verify against the example
+   commands once credits are added, then this can be marked done.
+7. **Theme editor** — done. `lib/theme/schema.ts` (`site_themes.tokens` Zod schema: fonts, colors,
+   radius, buttonStyle — no new migration needed, the column already existed from Phase 2) +
+   `mergeThemeTokens` (2-level merge so a partial patch to `colors` doesn't wipe the rest of it —
+   shared by the manual editor's full-replace `setThemeTokens` and the AI's partial-patch
+   `update_theme`, both now schema-validated). Renders with **zero changes to the 9 section
+   Renderers**: this shadcn/Tailwind v4 setup already drives `bg-primary`, `rounded-lg`,
+   `var(--muted)` etc. off plain CSS custom properties (`--primary`, `--radius`, ...), so
+   `SitePage.tsx` just overrides those variables inline on a wrapper `div` scoped to that site's
+   content — verified the admin shell's own `--primary`/`--radius` are untouched outside that
+   wrapper. Foreground text color on primary/accent is auto-computed via relative luminance so
+   custom colors stay readable. Fonts load via a dynamically injected Google Fonts `<link>` (best
+   effort — an unrecognized font name 404s harmlessly and falls back down the stack). Editor page
+   at `.../sites/[siteId]/theme`.
 8. Analytics + redirect layer (unifies NFC tap / QR scan tracking with website analytics via
    short links, e.g. `tapreach.in/r/xxxx`)
 9. Refinements (starter templates, client self-serve access, etc.)
