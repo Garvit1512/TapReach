@@ -15,10 +15,12 @@ export interface CommandDef {
   /** One line under the label. */
   blurb: string;
   emoji: string;
-  /** Whether this command should be given the web search tool. */
+  /**
+   * Whether this command needs live web results. Grok only exposes web search
+   * through the /v1/responses endpoint, not the streaming chat endpoint — so this
+   * flag also decides which endpoint the route handler calls.
+   */
   webSearch: boolean;
-  /** How hard Claude should work — recon and debrief are the heavy ones. */
-  effort: "low" | "medium" | "high" | "xhigh";
 }
 
 export const COMMANDS: Record<CommandId, CommandDef> = {
@@ -28,7 +30,6 @@ export const COMMANDS: Record<CommandId, CommandDef> = {
     blurb: "Before you walk in — rating, rank, weak spot, opener, the number to ask for.",
     emoji: "🔍",
     webSearch: true,
-    effort: "high",
   },
   debrief: {
     id: "debrief",
@@ -36,7 +37,6 @@ export const COMMANDS: Record<CommandId, CommandDef> = {
     blurb: "Dump what happened. Get pipeline rows, dated follow-ups, and honest coaching.",
     emoji: "📝",
     webSearch: false,
-    effort: "high",
   },
   plan: {
     id: "plan",
@@ -44,7 +44,6 @@ export const COMMANDS: Record<CommandId, CommandDef> = {
     blurb: "Paste your Follow-Ups tab. Get overdue, due today, and one target.",
     emoji: "📅",
     webSearch: false,
-    effort: "medium",
   },
   growth: {
     id: "growth",
@@ -52,7 +51,6 @@ export const COMMANDS: Record<CommandId, CommandDef> = {
     blurb: "Paste your Pipeline tab. See who's ready for Ring 2 / Ring 3 when we launch.",
     emoji: "🌱",
     webSearch: false,
-    effort: "medium",
   },
 };
 
@@ -70,21 +68,23 @@ export interface CommandInput {
   primary: string;
   /** recon only: area / locality. */
   area?: string;
+  /**
+   * recon only: whether this call actually has live web search behind it.
+   * False on providers/configs where search would cost money (e.g. the default
+   * OpenRouter free-tier setup) — the prompt then tells the model plainly that
+   * it has no web access this run, instead of instructing it to "search" when
+   * nothing will actually search.
+   */
+  liveSearch?: boolean;
 }
 
-export function buildUserPrompt({ command, primary, area }: CommandInput): string {
+export function buildUserPrompt({ command, primary, area, liveSearch }: CommandInput): string {
   const today = `Today's date is ${todayIST()} (IST).`;
 
   switch (command) {
-    case "recon":
-      return `${today}
-
-MODE: RECON. Utkarsh is about to walk into this business:
-
-Business: ${primary}
-Area: ${area || "not specified"}
-
-Research it with web search before answering. Gather: Google rating, review count, and
+    case "recon": {
+      const researchInstruction = liveSearch
+        ? `Research it with web search before answering. Gather: Google rating, review count, and
 the date of the most recent review (recency matters more than total); what the negative
 reviews actually complain about — service, food, price, wait — because that is the pitch
 angle; whether reviews name individual staff (signals a per-person card sale); whether a
@@ -94,7 +94,22 @@ their ratings, so you can say where this business actually ranks locally; physic
 (tables, chairs, trainers, doctors, counters) from photos, listings, or their own site;
 and price point (cost for two, membership fee, service menu), which sets the ticket ceiling.
 
-Anything you cannot find, write "not found". Do not estimate.
+Anything you cannot find, write "not found". Do not estimate.`
+        : `You do NOT have live web access on this run — no search tool is attached. Do not
+claim to have looked anything up, and do not invent a rating, review count, follower
+count, or price. For every field in the card below that you cannot know with real
+confidence from general knowledge, write "not found — no web access this run" rather
+than guessing. If you happen to know this specific business already, use that
+knowledge, but say plainly it is not freshly verified.`;
+
+      return `${today}
+
+MODE: RECON. Utkarsh is about to walk into this business:
+
+Business: ${primary}
+Area: ${area || "not specified"}
+
+${researchInstruction}
 
 Return exactly two things:
 
@@ -125,6 +140,7 @@ GROWTH FIT  <Ring 2 / Ring 3 / neither yet — one line, with the reason>
 - The three acceptable exits
 
 Keep it phone-sized. He is reading this walking up to the door.`;
+    }
 
     case "debrief":
       return `${today}

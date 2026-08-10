@@ -33,7 +33,6 @@ export function AgentRunner({
   const [primary, setPrimary] = useState("");
   const [area, setArea] = useState("");
   const [output, setOutput] = useState("");
-  const [thinking, setThinking] = useState("");
   const [status, setStatus] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [running, setRunning] = useState(false);
@@ -52,7 +51,6 @@ export function AgentRunner({
 
     setRunning(true);
     setOutput("");
-    setThinking("");
     setStatus(null);
     setError(null);
 
@@ -98,11 +96,15 @@ export function AgentRunner({
           if (event === "text") {
             setOutput((prev) => prev + (data as string));
             setStatus(null);
-          } else if (event === "thinking") {
-            setThinking((prev) => (prev + (data as string)).slice(-400));
           } else if (event === "status") {
             const tool = (data as { tool?: string }).tool;
-            setStatus(tool === "web_search" ? "Searching the web…" : "Working…");
+            setStatus(
+              tool === "web_search"
+                ? "Searching the web…"
+                : tool === "no_search"
+                  ? "No live web access on this run — answering from what the model already knows…"
+                  : "Working…",
+            );
           } else if (event === "error") {
             setError((data as { message: string }).message);
           }
@@ -196,13 +198,8 @@ export function AgentRunner({
           <div className="mt-5 rounded-[var(--tr-radius)] border border-line bg-raised px-3.5 py-4">
             <p className="flex items-center gap-2 text-[13px] font-semibold text-green">
               <span className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-green" />
-              {status ?? "Thinking…"}
+              {status ?? "Working…"}
             </p>
-            {thinking && (
-              <p className="mt-2 line-clamp-3 text-[12.5px] leading-relaxed text-fg-muted">
-                {thinking}
-              </p>
-            )}
           </div>
         )}
 
