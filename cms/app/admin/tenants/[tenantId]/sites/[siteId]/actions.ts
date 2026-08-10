@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import type { SectionType } from "@/lib/sections/types";
+import { themeTokensSchema, mergeThemeTokens } from "@/lib/theme/schema";
 
 type SnapshotSection = {
   type: SectionType;
@@ -142,4 +143,45 @@ export async function restoreVersion(versionId: string, siteId: string, tenantId
   revalidatePath(p.builder);
   revalidatePath(p.preview);
   revalidatePath(p.versions);
+}
+
+export async function updateTheme(siteId: string, patch: Record<string, unknown>, revalidatePathTarget: string) {
+  const supabase = await createClient();
+
+  const { data: existing, error: readError } = await supabase
+    .from("site_themes")
+    .select("tokens")
+    .eq("site_id", siteId)
+    .maybeSingle();
+  if (readError) throw new Error(readError.message);
+
+  const tokens = mergeThemeTokens((existing?.tokens ?? {}) as Record<string, unknown>, patch);
+  const { error } = await supabase.from("site_themes").update({ tokens }).eq("site_id", siteId);
+  if (error) throw new Error(error.message);
+
+  revalidatePath(revalidatePathTarget);
+}
+
+export async function setThemeTokens(siteId: string, tokens: Record<string, unknown>, revalidatePathTarget: string) {
+  const parsed = themeTokensSchema.safeParse(tokens);
+  if (!parsed.success) throw new Error(parsed.error.issues.map((i) => i.message).join(", "));
+
+  const supabase = await createClient();
+  const { error } = await supabase.from("site_themes").update({ tokens: parsed.data }).eq("site_id", siteId);
+  if (error) throw new Error(error.message);
+
+  revalidatePath(revalidatePathTarget);
+}
+
+export async function updateSeo(siteId: string, patch: Record<string, unknown>, revalidatePathTarget: string) {
+  const supabase = await createClient();
+
+  const { data: existing, error: readError } = await supabase.from("sites").select("seo").eq("id", siteId).single();
+  if (readError) throw new Error(readError.message);
+
+  const seo = { ...((existing?.seo ?? {}) as Record<string, unknown>), ...patch };
+  const { error } = await supabase.from("sites").update({ seo }).eq("id", siteId);
+  if (error) throw new Error(error.message);
+
+  revalidatePath(revalidatePathTarget);
 }

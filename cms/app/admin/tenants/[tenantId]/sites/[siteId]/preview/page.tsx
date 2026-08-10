@@ -16,12 +16,15 @@ export default async function PreviewPage(
     notFound();
   }
 
-  const { data: sections } = await supabase
-    .from("sections")
-    .select("*")
-    .eq("site_id", siteId)
-    .eq("is_visible", true)
-    .order("position", { ascending: true });
+  const [{ data: sections }, { data: theme }] = await Promise.all([
+    supabase
+      .from("sections")
+      .select("*")
+      .eq("site_id", siteId)
+      .eq("is_visible", true)
+      .order("position", { ascending: true }),
+    supabase.from("site_themes").select("tokens").eq("site_id", siteId).maybeSingle(),
+  ]);
 
   return (
     <div>
@@ -37,7 +40,11 @@ export default async function PreviewPage(
           what visitors will see once the site is live.
         </span>
       </div>
-      <SitePage sections={(sections ?? []) as Section[]} />
+      <SitePage
+        sections={(sections ?? []) as Section[]}
+        theme={(theme?.tokens ?? {}) as Record<string, unknown>}
+        siteId={siteId}
+      />
     </div>
   );
 }
