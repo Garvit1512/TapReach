@@ -12,6 +12,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["--prefix", "cms", "run", "dev", "--", "-p", "3001"],
       "port": 3001
+    },
+    {
+      "name": "fieldagent",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "fieldagent", "run", "dev", "--", "-p", "3002"],
+      "port": 3002
     }
   ]
 }
