@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { grok, GROK_MODEL } from "./grok";
+import { getGrokClient, GROK_MODEL } from "./grok";
 
 /**
  * Provider abstraction. LLM_PROVIDER selects which backend serves every command.
@@ -59,7 +59,7 @@ export function getProvider(): ActiveProvider {
     }
     provider = {
       id: "grok",
-      client: grok,
+      client: getGrokClient(),
       model: GROK_MODEL,
       webSearchAvailable: true,
       consoleUrl: "console.x.ai",
